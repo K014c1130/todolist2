@@ -10,22 +10,30 @@
  try{
   $dsn = 'mysql:dbname=todolist;host=localhost;charset=utf8';
   $user = 'root';
-  $password = 'root';
-  $dbh = new PDO($dsn, $user);
+  $password = '';
+  $dbh = new PDO($dsn, $user,$password);
   $dbh->query('SET NAMES utf8');
   $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
   if(isset($_GET['add'])) {
+    $item = $_GET['item'];
+    $item = htmlspecialchars($item,ENT_QUOTES);
+    $error ="";
+    if($item===""){
+      $error = "メモが入力されていません";
+    }else{
+
     $sql = 'INSERT INTO list(item) VALUES(?)';
     $stmt = $dbh->prepare($sql);
-    $data[] = $_GET['name'];
+    $data[] = $item;
     $stmt-> execute($data);
 
     $dbh = null;
-  } else if(isset($_GET['delete'])) {
+  }
+} else if(isset($_GET['delete'])) {
     $sql = 'DELETE FROM list WHERE id=?';
     $stmt = $dbh->prepare($sql);
-    $data[] = $_GET['name'];
+//    $data[] = $_GET['$rec['id']'];
     $stmt->execute($data);
 
     $dbh = null;
@@ -37,11 +45,12 @@
   $dbh = null;
   ?>
 <form method = "get" action = "index.php">
-<input type="text" name = "name" style="width:200px">
-<input type="submit" value="add"><br />
+<input type="text" name = "item" style="width:200px">
+<input type="submit" name="add" value="add"><br />
+
 </form>
 
-<form method = "get" action = "project_delete">
+<form method = "get" action = "index.php">
 <?php
 while(true) {
   $rec = $stmt->fetch(PDO::FETCH_ASSOC);
