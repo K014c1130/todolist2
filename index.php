@@ -14,7 +14,7 @@
   $dbh = new PDO($dsn, $user);
   $dbh->query('SET NAMES utf8');
   $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false)
-  if(isset($_GET['add'])){
+  if(isset($_GET['add'])) {
     $item = $_GET['item'];
     $item = htmlspecialchars($item, ENT_QUOTES);
     $error = "";
