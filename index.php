@@ -13,15 +13,20 @@
   $password = 'root';
   $dbh = new PDO($dsn, $user);
   $dbh->query('SET NAMES utf8');
-  $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-
-  if(isset($_GET['add'])) {
-    $sql = 'INSERT INTO list(item) VALUES(?)';
-    $stmt = $dbh->prepare($sql);
-    $data[] = $_GET['name'];
-    $stmt-> execute($data);
-
-    $dbh = null;
+  $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false)
+  if(isset($_GET['add'])){
+    $item = $_GET['item'];
+    $item = htmlspecialchars($item, ENT_QUOTES);
+    $error = "";
+    if($item === "") {
+      $error = "メモが入力されていません。";
+    } else{
+      $sql = 'INSERT INTO　list (item) VALUES (:item)';
+      $stmt = $dbh->prepare($sql);
+      $stmt->bindParam(':item', $item);
+      $stmt->execute();
+    }
+    unset($item);
   } else if(isset($_GET['delete'])) {
     $sql = 'DELETE FROM list WHERE id=?';
     $stmt = $dbh->prepare($sql);
