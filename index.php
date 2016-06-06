@@ -16,6 +16,7 @@
   $password = 'root';
   $dbh = new PDO($dsn, $user);
   $dbh->query('SET NAMES utf8');
+<<<<<<< HEAD
   $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 
 
